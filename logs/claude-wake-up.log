@@ -1,0 +1,8 @@
+[2025-09-03 06:32:15] === Claude Wake-up Script Started ===
+[2025-09-03 06:32:15] Working directory: /Users/gabrielecegi/bp
+[2025-09-03 06:32:15] Weekday detected (day 3), proceeding with wake-up
+[2025-09-03 06:32:15] Sending wake-up ping to Claude...
+[2025-09-03 06:32:17] ✅ Claude wake-up successful
+[2025-09-03 06:32:17] Claude response: awake
+[2025-09-03 06:32:17] === Claude Wake-up Script Completed ===
+[2025-09-03 06:32:17] Next wake-up scheduled for tomorrow at 4:55 AM

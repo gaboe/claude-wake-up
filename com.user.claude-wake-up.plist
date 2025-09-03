@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.user.claude-wake-up</string>
+    
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/gabrielecegi/bp/claude-wake-up/claude-wake-up.sh</string>
+    </array>
+    
+    <!-- Spustí každý pracovný deň o 4:55 -->
+    <key>StartCalendarInterval</key>
+    <array>
+        <!-- Pondelok -->
+        <dict>
+            <key>Weekday</key>
+            <integer>1</integer>
+            <key>Hour</key>
+            <integer>4</integer>
+            <key>Minute</key>
+            <integer>55</integer>
+        </dict>
+        <!-- Utorok -->
+        <dict>
+            <key>Weekday</key>
+            <integer>2</integer>
+            <key>Hour</key>
+            <integer>4</integer>
+            <key>Minute</key>
+            <integer>55</integer>
+        </dict>
+        <!-- Streda -->
+        <dict>
+            <key>Weekday</key>
+            <integer>3</integer>
+            <key>Hour</key>
+            <integer>4</integer>
+            <key>Minute</key>
+            <integer>55</integer>
+        </dict>
+        <!-- Štvrtok -->
+        <dict>
+            <key>Weekday</key>
+            <integer>4</integer>
+            <key>Hour</key>
+            <integer>4</integer>
+            <key>Minute</key>
+            <integer>55</integer>
+        </dict>
+        <!-- Piatok -->
+        <dict>
+            <key>Weekday</key>
+            <integer>5</integer>
+            <key>Hour</key>
+            <integer>4</integer>
+            <key>Minute</key>
+            <integer>55</integer>
+        </dict>
+    </array>
+    
+    <!-- Nech služba beží len keď je potrebná -->
+    <key>KeepAlive</key>
+    <false/>
+    
+    <!-- Pracovný adresár -->
+    <key>WorkingDirectory</key>
+    <string>/Users/gabrielecegi/bp/claude-wake-up</string>
+    
+    <!-- Logy pre launchd -->
+    <key>StandardOutPath</key>
+    <string>/Users/gabrielecegi/bp/claude-wake-up/logs/launchd-wake-up.out</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/gabrielecegi/bp/claude-wake-up/logs/launchd-wake-up.err</string>
+    
+    <!-- Environment pre používateľa -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+</dict>
+</plist>

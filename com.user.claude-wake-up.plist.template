@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.user.claude-wake-up</string>
+    
+    <key>ProgramArguments</key>
+    <array>
+        <string>SCRIPT_PATH_PLACEHOLDER</string>
+    </array>
+    
+    <!-- Runs every weekday at 4:55 AM -->
+    <key>StartCalendarInterval</key>
+    <array>
+        <!-- Monday -->
+        <dict>
+            <key>Weekday</key>
+            <integer>1</integer>
+            <key>Hour</key>
+            <integer>4</integer>
+            <key>Minute</key>
+            <integer>55</integer>
+        </dict>
+        <!-- Tuesday -->
+        <dict>
+            <key>Weekday</key>
+            <integer>2</integer>
+            <key>Hour</key>
+            <integer>4</integer>
+            <key>Minute</key>
+            <integer>55</integer>
+        </dict>
+        <!-- Wednesday -->
+        <dict>
+            <key>Weekday</key>
+            <integer>3</integer>
+            <key>Hour</key>
+            <integer>4</integer>
+            <key>Minute</key>
+            <integer>55</integer>
+        </dict>
+        <!-- Thursday -->
+        <dict>
+            <key>Weekday</key>
+            <integer>4</integer>
+            <key>Hour</key>
+            <integer>4</integer>
+            <key>Minute</key>
+            <integer>55</integer>
+        </dict>
+        <!-- Friday -->
+        <dict>
+            <key>Weekday</key>
+            <integer>5</integer>
+            <key>Hour</key>
+            <integer>4</integer>
+            <key>Minute</key>
+            <integer>55</integer>
+        </dict>
+    </array>
+    
+    <!-- Only run when needed -->
+    <key>KeepAlive</key>
+    <false/>
+    
+    <!-- Working directory -->
+    <key>WorkingDirectory</key>
+    <string>WORKING_DIR_PLACEHOLDER</string>
+    
+    <!-- Logs for launchd -->
+    <key>StandardOutPath</key>
+    <string>LOG_DIR_PLACEHOLDER/launchd-wake-up.out</string>
+    <key>StandardErrorPath</key>
+    <string>LOG_DIR_PLACEHOLDER/launchd-wake-up.err</string>
+    
+    <!-- Environment variables -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+</dict>
+</plist>

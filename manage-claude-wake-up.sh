@@ -97,10 +97,70 @@ case "$1" in
         print_status "System wake-up scheduled"
         ;;
         
+    schedule)
+        if [ -z "$2" ]; then
+            print_error "Usage: $0 schedule HH:MM"
+            echo "Example: $0 schedule 06:15"
+            exit 1
+        fi
+        
+        NEW_TIME="$2"
+        
+        # Validate time format
+        if [[ ! "$NEW_TIME" =~ ^[0-2][0-9]:[0-5][0-9]$ ]]; then
+            print_error "Invalid time format. Use HH:MM (e.g., 04:55, 06:15)"
+            exit 1
+        fi
+        
+        # Extract hour and minute
+        WAKE_HOUR=${NEW_TIME%:*}
+        WAKE_MINUTE=${NEW_TIME#*:}
+        
+        # Convert to integers (remove leading zeros)
+        WAKE_HOUR=$((10#$WAKE_HOUR))
+        WAKE_MINUTE=$((10#$WAKE_MINUTE))
+        
+        print_status "Updating wake-up time to $NEW_TIME..."
+        
+        # Check if Claude CLI is available
+        if ! command -v claude &> /dev/null; then
+            print_error "Claude CLI not found. Please install it first."
+            exit 1
+        fi
+        
+        CLAUDE_PATH=$(which claude)
+        CLAUDE_DIR=$(dirname "$CLAUDE_PATH")
+        
+        # Build dynamic PATH
+        DYNAMIC_PATH="/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+        if [[ ":$DYNAMIC_PATH:" != *":$CLAUDE_DIR:"* ]]; then
+            DYNAMIC_PATH="$CLAUDE_DIR:$DYNAMIC_PATH"
+        fi
+        
+        # Generate new plist
+        sed \
+            -e "s|SCRIPT_PATH_PLACEHOLDER|$SCRIPT_DIR/claude-wake-up.sh|g" \
+            -e "s|WORKING_DIR_PLACEHOLDER|$SCRIPT_DIR|g" \
+            -e "s|LOG_DIR_PLACEHOLDER|$SCRIPT_DIR/logs|g" \
+            -e "s|DYNAMIC_PATH_PLACEHOLDER|$DYNAMIC_PATH|g" \
+            -e "s|<integer>4</integer>|<integer>$WAKE_HOUR</integer>|g" \
+            -e "s|<integer>55</integer>|<integer>$WAKE_MINUTE</integer>|g" \
+            "$SCRIPT_DIR/com.user.claude-wake-up.plist.template" > "$SCRIPT_DIR/com.user.claude-wake-up.plist"
+        
+        # Reload service
+        print_status "Reloading service..."
+        launchctl unload "$PLIST_FILE" 2>/dev/null || true
+        cp "$SCRIPT_DIR/com.user.claude-wake-up.plist" "$PLIST_FILE"
+        launchctl load "$PLIST_FILE"
+        
+        print_status "✓ Wake-up time updated to $NEW_TIME"
+        print_status "Service will now run at $NEW_TIME on weekdays"
+        ;;
+        
     *)
         echo "Claude Wake-up Service Manager"
         echo ""
-        echo "Usage: $0 {status|logs|test|load|unload|enable-wake|disable-wake}"
+        echo "Usage: $0 {status|logs|test|load|unload|enable-wake|disable-wake|schedule}"
         echo ""
         echo "Commands:"
         echo "  status       - Show service status and recent activity"
@@ -111,6 +171,7 @@ case "$1" in
         echo "  unload       - Unload the service"
         echo "  enable-wake  - Enable system wake-up at 4:50 AM"
         echo "  disable-wake - Disable system wake-up"
+        echo "  schedule HH:MM - Change wake-up time (e.g., schedule 06:15)"
         echo ""
         echo "Service will automatically wake your Mac and ping Claude"
         echo "every weekday at 4:55 AM to maintain usage windows."

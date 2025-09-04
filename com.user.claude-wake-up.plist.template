@@ -78,7 +78,7 @@
     <key>EnvironmentVariables</key>
     <dict>
         <key>PATH</key>
-        <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <string>DYNAMIC_PATH_PLACEHOLDER</string>
     </dict>
 </dict>
 </plist>

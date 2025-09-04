@@ -6,3 +6,17 @@
 [2025-09-03 06:32:17] Claude response: awake
 [2025-09-03 06:32:17] === Claude Wake-up Script Completed ===
 [2025-09-03 06:32:17] Next wake-up scheduled for tomorrow at 4:55 AM
+[2025-09-04 05:03:07] === Claude Wake-up Script Started ===
+[2025-09-04 05:03:07] Working directory: /Users/gabrielecegi/bp/claude-wake-up
+[2025-09-04 05:03:07] Weekday detected (day 4), proceeding with wake-up
+[2025-09-04 05:03:07] ERROR: claude command not found
+[2025-09-04 05:03:07] PING: ERROR: claude command not found
+[2025-09-04 06:04:47] === Claude Wake-up Script Started ===
+[2025-09-04 06:04:47] Working directory: /Users/gabrielecegi/bp/claude-wake-up
+[2025-09-04 06:04:47] Weekday detected (day 4), proceeding with wake-up
+[2025-09-04 06:04:47] Sending wake-up ping to Claude...
+[2025-09-04 06:04:50] ✅ Claude wake-up successful
+[2025-09-04 06:04:50] Claude response: awake
+[2025-09-04 06:04:50] PING: SUCCESS: Claude responded - awake
+[2025-09-04 06:04:50] === Claude Wake-up Script Completed ===
+[2025-09-04 06:04:50] Next wake-up scheduled for tomorrow at 4:55 AM

@@ -21,11 +21,14 @@ Automatic system to wake up Claude CLI every weekday at 4:55 AM to maintain 5-ho
 git clone https://github.com/yourusername/claude-wake-up.git
 cd claude-wake-up
 
-# Run the setup script
+# Run the setup script (default: 4:55 AM)
 ./setup.sh
+
+# Or set custom wake-up time
+./setup.sh --time 06:15    # Wake up at 6:15 AM
 ```
 
-That's it! The service is now active and will wake your Mac every weekday at 4:55 AM.
+That's it! The service is now active and will wake your Mac every weekday at your chosen time.
 
 ## 🛠 What Gets Installed
 
@@ -67,6 +70,9 @@ claude-wake-up/
 # System wake-up management
 ./manage-claude-wake-up.sh disable-wake
 ./manage-claude-wake-up.sh enable-wake
+
+# Change wake-up time
+./manage-claude-wake-up.sh schedule 06:15    # Change to 6:15 AM
 ```
 
 ## 📋 How It Works
@@ -131,6 +137,9 @@ pmset -g sched  # verify scheduled wake-up
 ```bash
 ./manage-claude-wake-up.sh test  # manual test
 which claude  # verify Claude is installed
+
+# If "claude command not found" error:
+./setup.sh  # Re-run setup to fix PATH detection
 ```
 
 ### Complete uninstallation:
@@ -159,16 +168,17 @@ date  # check current day
 ```
 
 ### Customization
-- **Change time**: Edit the `setup.sh` and modify the hour/minute values
+- **Change time**: Use `./setup.sh --time HH:MM` or `./manage-claude-wake-up.sh schedule HH:MM`
 - **Change frequency**: Modify the weekday arrays in the plist template
 - **Add more checks**: Extend `claude-wake-up.sh` with additional logic
 
 ## 📝 Technical Details
 
 - **Platform**: macOS LaunchAgent
-- **Schedule**: Weekdays (Mon-Fri) at 4:55 AM  
-- **System Wake**: 4:50 AM via `pmset repeat`
-- **Prerequisites**: Claude CLI installed
+- **Schedule**: Weekdays (Mon-Fri) at configurable time (default: 4:55 AM)
+- **System Wake**: 5 minutes before Claude ping via `pmset repeat`
+- **Prerequisites**: Claude CLI installed (auto-detected PATH)
+- **PATH Detection**: Automatically finds Claude CLI installation location
 - **Security**: Uses `--dangerously-skip-permissions` only for automated ping
 - **Logging**: Single log file with timestamped entries
 - **Compatibility**: macOS 10.12+ (tested on macOS 14+)

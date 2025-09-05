@@ -1,12 +1,12 @@
 # Claude Wake-up Service 🌅
 
-Automatic system to wake up Claude CLI every weekday at 4:55 AM to maintain 5-hour Claude usage windows.
+Automatic system to wake up Claude CLI every weekday at 4:20 AM to maintain 5-hour Claude usage windows.
 
 ## 🎯 Purpose
 
 - **Problem**: Claude has 5-hour usage windows. With an 8-hour workday, you need 2-3 windows.
-- **Solution**: Automatic MacBook wake-up and Claude ping at 4:55 AM on weekdays.
-- **Result**: Guaranteed 3 windows daily (4:55, ~10:00, ~15:00) for uninterrupted work.
+- **Solution**: Automatic MacBook wake-up and Claude ping at 4:20 AM on weekdays.
+- **Result**: Guaranteed 3 windows daily (4:20, ~09:30, ~14:30) for uninterrupted work.
 
 ## ⚡ Quick Start
 
@@ -21,7 +21,7 @@ Automatic system to wake up Claude CLI every weekday at 4:55 AM to maintain 5-ho
 git clone https://github.com/yourusername/claude-wake-up.git
 cd claude-wake-up
 
-# Run the setup script (default: 4:55 AM)
+# Run the setup script (default: 4:20 AM)
 ./setup.sh
 
 # Or set custom wake-up time
@@ -46,7 +46,7 @@ claude-wake-up/
 
 ### System Changes
 - **LaunchAgent**: `~/Library/LaunchAgents/com.user.claude-wake-up.plist`
-- **System Wake-up**: `pmset repeat wakeorpoweron MTWRF 04:50:00`
+- **System Wake-up**: `pmset repeat wakeorpoweron MTWRF 04:15:00`
 
 ## 🎮 Usage
 
@@ -77,14 +77,16 @@ claude-wake-up/
 
 ## 📋 How It Works
 
-1. **4:50 AM**: MacBook automatically wakes up (`pmset`)
-2. **4:55 AM**: LaunchAgent runs `claude-wake-up.sh`
+1. **4:15 AM**: MacBook automatically wakes up (`pmset`)
+2. **4:20 AM**: LaunchAgent runs `claude-wake-up.sh`
 3. **Script**: 
    - Checks if it's a weekday (skips weekends)
    - Sends ping to Claude: "Good morning Claude! This is an automated wake-up ping..."
    - Claude responds "awake"
    - Everything gets logged
 4. **Result**: Claude window is active, MacBook can go back to sleep
+
+**Note**: LaunchAgent may have timing variance of ±10 minutes from scheduled time, which is normal macOS behavior. The system wake happens 5 minutes early to ensure proper startup.
 
 ## 📊 Monitoring
 
@@ -102,13 +104,13 @@ tail -f logs/claude-wake-up.log
 
 ### Log Format
 ```
-[2025-01-15 04:55:01] === Claude Wake-up Script Started ===
-[2025-01-15 04:55:01] Working directory: /path/to/claude-wake-up
-[2025-01-15 04:55:01] Weekday detected (day 2), proceeding with wake-up
-[2025-01-15 04:55:01] Sending wake-up ping to Claude...
-[2025-01-15 04:55:03] ✅ Claude wake-up successful
-[2025-01-15 04:55:03] Claude response: awake
-[2025-01-15 04:55:03] PING: SUCCESS: Claude responded - awake
+[2025-01-15 04:20:01] === Claude Wake-up Script Started ===
+[2025-01-15 04:20:01] Working directory: /path/to/claude-wake-up
+[2025-01-15 04:20:01] Weekday detected (day 2), proceeding with wake-up
+[2025-01-15 04:20:01] Sending wake-up ping to Claude...
+[2025-01-15 04:20:03] ✅ Claude wake-up successful
+[2025-01-15 04:20:03] Claude response: awake
+[2025-01-15 04:20:03] PING: SUCCESS: Claude responded - awake
 ```
 
 ## ⚡ Benefits
@@ -175,7 +177,7 @@ date  # check current day
 ## 📝 Technical Details
 
 - **Platform**: macOS LaunchAgent
-- **Schedule**: Weekdays (Mon-Fri) at configurable time (default: 4:55 AM)
+- **Schedule**: Weekdays (Mon-Fri) at configurable time (default: 4:20 AM)
 - **System Wake**: 5 minutes before Claude ping via `pmset repeat`
 - **Prerequisites**: Claude CLI installed (auto-detected PATH)
 - **PATH Detection**: Automatically finds Claude CLI installation location

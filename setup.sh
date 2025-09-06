@@ -6,7 +6,7 @@
 set -e
 
 # Parse command line arguments
-WAKE_TIME="04:55"
+WAKE_TIME="04:20"
 while [[ $# -gt 0 ]]; do
     case $1 in
         --time)
@@ -17,11 +17,11 @@ while [[ $# -gt 0 ]]; do
             echo "Usage: $0 [--time HH:MM]"
             echo ""
             echo "Options:"
-            echo "  --time HH:MM    Set custom wake-up time (default: 04:55)"
+            echo "  --time HH:MM    Set custom wake-up time (default: 04:20)"
             echo "  -h, --help      Show this help message"
             echo ""
             echo "Examples:"
-            echo "  $0                    # Use default time (04:55)"
+            echo "  $0                    # Use default time (04:20)"
             echo "  $0 --time 06:15      # Set wake-up time to 6:15 AM"
             exit 0
             ;;
@@ -139,13 +139,24 @@ print_status "✓ Installed LaunchAgent configuration"
 launchctl load "$PLIST_FILE"
 print_status "✓ Loaded Claude wake-up service"
 
-# Set up system wake-up
+# Set up system wake-up (5 minutes before script execution)
 print_status "Setting up automatic MacBook wake-up..."
-if sudo pmset repeat wakeorpoweron MTWRF 04:50:00; then
-    print_status "✓ System wake-up scheduled for weekdays at 4:50 AM"
+SYSTEM_WAKE_MINUTE=$((WAKE_MINUTE - 5))
+SYSTEM_WAKE_HOUR=$WAKE_HOUR
+if [[ $SYSTEM_WAKE_MINUTE -lt 0 ]]; then
+    SYSTEM_WAKE_MINUTE=$((SYSTEM_WAKE_MINUTE + 60))
+    SYSTEM_WAKE_HOUR=$((SYSTEM_WAKE_HOUR - 1))
+fi
+if [[ $SYSTEM_WAKE_HOUR -lt 0 ]]; then
+    SYSTEM_WAKE_HOUR=$((SYSTEM_WAKE_HOUR + 24))
+fi
+
+SYSTEM_WAKE_TIME=$(printf "%02d:%02d:00" $SYSTEM_WAKE_HOUR $SYSTEM_WAKE_MINUTE)
+if sudo pmset repeat wakeorpoweron MTWRF $SYSTEM_WAKE_TIME; then
+    print_status "✓ System wake-up scheduled for weekdays at $(printf "%02d:%02d" $SYSTEM_WAKE_HOUR $SYSTEM_WAKE_MINUTE)"
 else
     print_warning "Failed to set system wake-up. You may need to run this manually:"
-    echo "  sudo pmset repeat wakeorpoweron MTWRF 04:50:00"
+    echo "  sudo pmset repeat wakeorpoweron MTWRF $SYSTEM_WAKE_TIME"
 fi
 
 # Verify installation
@@ -172,7 +183,7 @@ echo ""
 echo -e "${GREEN}=== Installation Complete! ===${NC}"
 echo ""
 echo "Your Claude wake-up service is now active and will:"
-echo "• Wake your Mac at $(printf "%02d:%02d" $((WAKE_HOUR == 0 ? 4 : WAKE_HOUR-1)) $((WAKE_MINUTE >= 5 ? WAKE_MINUTE-5 : WAKE_MINUTE+55))) on weekdays"
+echo "• Wake your Mac at $(printf "%02d:%02d" $SYSTEM_WAKE_HOUR $SYSTEM_WAKE_MINUTE) on weekdays"
 echo "• Send a wake-up ping to Claude at $WAKE_TIME"
 echo "• Keep your Claude usage windows active"
 echo ""

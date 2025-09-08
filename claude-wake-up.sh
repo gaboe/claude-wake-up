@@ -42,15 +42,24 @@ if ! command -v claude &> /dev/null; then
 fi
 
 log_message "Sending wake-up ping to Claude..."
+log_message "Network check: $(ping -c 1 -W 3000 8.8.8.8 >/dev/null 2>&1 && echo "OK" || echo "FAILED")"
+log_message "Start time: $(date '+%Y-%m-%d %H:%M:%S')"
 
-# Send a simple wake-up message to Claude
-wake_response=$(echo "Good morning Claude! This is an automated wake-up ping to keep your usage window active. Please respond with just 'awake' to confirm." | claude --dangerously-skip-permissions 2>&1)
+# Send a simple wake-up message to Claude with 2 minute timeout
+wake_response=$(echo "Good morning Claude! This is an automated wake-up ping to keep your usage window active. Please respond with just 'awake' to confirm." | perl -e 'alarm 120; exec @ARGV' claude --dangerously-skip-permissions 2>&1)
 result=$?
+
+log_message "End time: $(date '+%Y-%m-%d %H:%M:%S')"
+log_message "Exit code: $result"
 
 if [ $result -eq 0 ]; then
     log_message "✅ Claude wake-up successful"
     log_message "Claude response: $wake_response"
     log_ping "SUCCESS: Claude responded - $wake_response"
+elif [ $result -eq 124 ]; then
+    log_message "⏰ Claude wake-up timed out (>2 minutes)"
+    log_message "Timeout error: $wake_response"
+    log_ping "TIMEOUT: Command exceeded 2 minute limit"
 else
     log_message "❌ Claude wake-up failed with code $result"
     log_message "Error output: $wake_response"
